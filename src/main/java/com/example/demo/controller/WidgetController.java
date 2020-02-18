@@ -15,15 +15,21 @@ public class WidgetController {
 
     WidgetService service = new WidgetService();
 
+    @PutMapping("/api/widgets/{wid}")
+    public int updateWidget(@PathVariable("wid") String widgetId, @RequestBody  Widget widget) {
+        return service.updateWidget(widgetId, widget);
+    }
+
+
     @PostMapping("/api/topics/{tid}/widgets")
     public Widget createWidget(@PathVariable("tid") String topicId, @RequestBody  Widget widget) {
         widget.setTopicId(topicId);
         return service.createWidget(widget);
     }
 
-    @DeleteMapping("/api/widgets/{widgetId}")
-    public int deleteWidget(@PathVariable("widgetId") String wid) {
-       return service.deleteWidget(wid);
+    @DeleteMapping("/api/widgets/{wid}")
+    public int deleteWidget(@PathVariable("wid") String wid) {
+        return service.deleteWidget(wid);
     }
 
     @GetMapping("/api/topics/{tid}/widgets")

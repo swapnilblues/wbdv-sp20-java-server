@@ -46,12 +46,25 @@ public class WidgetService {
     }
 
     public int deleteWidget(String wid) {
-        widgetList = widgetList
-                .stream()
-                .filter(w -> !w.getId().equals(wid))
-                .collect(Collectors.toList());
-        ;
-        return 1;
+//        widgetList = widgetList
+//                .stream()
+//                .filter(w -> !w.getId().equals(wid))
+//                .collect(Collectors.toList());
+//        ;
+//        return 1;
+        int a = 0;
+        List<Widget> newList = new ArrayList<>();
+
+        for(Widget widget : widgetList) {
+            if(widget.getId().equals(wid))
+                ++a;
+            else {
+                newList.add(widget);
+            }
+        }
+        widgetList.clear();
+        widgetList = newList;
+        return a;
     }
 
     public Widget findWidgetById(String wid) {
@@ -77,5 +90,27 @@ public class WidgetService {
 
         return widgetList;
 
+    }
+
+    public int updateWidget(String widgetId, Widget newWidget) {
+
+        int a =0;
+        for(Widget w : widgetList) {
+            if(w.getId().equals(widgetId)) {
+                ++a;
+                w.setName(newWidget.getName());
+                w.setType(newWidget.getType());
+                w.setCssClass(newWidget.getCssClass());
+                w.setHeight(newWidget.getHeight());
+                w.setWidth(newWidget.getWidth());
+                w.setOrder(newWidget.getOrder());
+                w.setText(newWidget.getText());
+                w.setUrl(newWidget.getUrl());
+                w.setSize(newWidget.getSize());
+                w.setStyle(newWidget.getStyle());
+                w.setValue(newWidget.getValue());
+            }
+        }
+        return a;
     }
 }
