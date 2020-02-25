@@ -38,6 +38,16 @@ public class WidgetController {
         return service.findWidgetsForTopic(topicId);
     }
 
+    @GetMapping("/api/widgets/down-widget/{wid}")
+    public List<Widget> downWidget(@PathVariable("wid") String widgetId) {
+        return service.downWidget(widgetId);
+    }
+
+    @GetMapping("/api/widgets/up-widget/{wid}")
+    public List<Widget> upWidget(@PathVariable("wid") String widgetId) {
+        return service.upWidget(widgetId);
+    }
+
     @GetMapping("/api/widgets")
     public List<Widget> findAllWidgets() {
         return service.findAllWidgets();

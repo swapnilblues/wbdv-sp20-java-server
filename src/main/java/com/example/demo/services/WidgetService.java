@@ -3,7 +3,7 @@ package com.example.demo.services;
 import com.example.demo.models.Widget;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -84,6 +84,61 @@ public class WidgetService {
             }
         }
         return results;
+    }
+
+    public List<Widget> downWidget(String widgetId) {
+        Widget widget = new Widget();
+        for (Widget w : widgetList) {
+            if (w.getId().equals(widgetId)) {
+                widget = w;
+            }
+        }
+
+        String topicId = widget.getTopicId();
+
+        for (int i = 0; i < widgetList.size(); i++) {
+            if (topicId.equals(widgetList.get(i).getTopicId())) {
+                if(widgetId.equals(widgetList.get(i).getId())) {
+                    int x = i;
+                    while (x <= widgetList.size() - 2) {
+                        if (widgetList.get(x + 1).getTopicId().equals(topicId)) {
+                            Collections.swap(widgetList, i, x + 1);
+                            return findWidgetsForTopic(topicId);
+                        }
+                        x--;
+                    }
+                }
+            }
+        }
+        return findWidgetsForTopic(topicId);
+
+    }
+
+    public List<Widget> upWidget(String widgetId) {
+        Widget widget = new Widget();
+        for (Widget w : widgetList) {
+            if (w.getId().equals(widgetId)) {
+                widget = w;
+            }
+        }
+
+        String topicId = widget.getTopicId();
+
+        for (int i = 0; i < widgetList.size(); i++) {
+            if (topicId.equals(widgetList.get(i).getTopicId())) {
+                if(widgetId.equals(widgetList.get(i).getId())) {
+                    int x = i;
+                    while (x >= 1) {
+                        if (widgetList.get(x-1).getTopicId().equals(topicId)) {
+                            Collections.swap(widgetList, i, x-1);
+                            return findWidgetsForTopic(topicId);
+                        }
+                        x--;
+                    }
+                }
+            }
+        }
+        return findWidgetsForTopic(topicId);
     }
 
     public List<Widget> findAllWidgets() {

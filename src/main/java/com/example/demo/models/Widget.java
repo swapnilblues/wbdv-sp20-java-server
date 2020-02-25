@@ -122,6 +122,8 @@ public class Widget {
     public Widget(String id, String name) {
         this.id = id;
         this.name = name;
+
+
     }
 
     public Widget() {
