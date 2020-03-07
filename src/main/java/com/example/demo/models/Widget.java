@@ -1,12 +1,20 @@
 package com.example.demo.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name="widgets")
 public class Widget {
-    private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
     private String  name = "New Widget";
-    private String topicId;
     private String type = "HEADING";
-    private int size = 1;
-    private int order;
+    private int size = 2;
+    private int ordering;
     private String text;
     private String url;
     private int width;
@@ -14,6 +22,18 @@ public class Widget {
     private String cssClass;
     private String style;
     private String value;
+
+    public Topic getTopic() {
+        return topic;
+    }
+
+    public void setTopic(Topic topic) {
+        this.topic = topic;
+    }
+
+    @ManyToOne
+    @JsonIgnore
+    private Topic topic;
 
     public String getName() {
         return name;
@@ -23,13 +43,10 @@ public class Widget {
         this.name = name;
     }
 
-    public int getOrder() {
-        return order;
-    }
 
-    public void setOrder(int order) {
-        this.order = order;
-    }
+    public int getOrdering() { return ordering; }
+
+    public void setOrdering(int ordering) { this.ordering = ordering; }
 
     public String getText() {
         return text;
@@ -103,23 +120,15 @@ public class Widget {
         this.type = type;
     }
 
-    public String getTopicId() {
-        return topicId;
-    }
-
-    public void setTopicId(String topicId) {
-        this.topicId = topicId;
-    }
-
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Widget(String id, String name) {
+    public Widget(Integer id, String name) {
         this.id = id;
         this.name = name;
 

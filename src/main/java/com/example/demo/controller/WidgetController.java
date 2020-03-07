@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.models.Widget;
 import com.example.demo.services.WidgetService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -13,7 +14,8 @@ public class WidgetController {
 
     List<Widget> widgetList = new ArrayList<Widget>();
 
-    WidgetService service = new WidgetService();
+    @Autowired
+    WidgetService service;
 
     @PutMapping("/api/widgets/{wid}")
     public int updateWidget(@PathVariable("wid") String widgetId, @RequestBody  Widget widget) {
@@ -22,19 +24,23 @@ public class WidgetController {
 
 
     @PostMapping("/api/topics/{tid}/widgets")
-    public Widget createWidget(@PathVariable("tid") String topicId, @RequestBody  Widget widget) {
-        widget.setTopicId(topicId);
-        return service.createWidget(widget);
+    public Widget createWidget(@PathVariable("tid") Integer topicId, @RequestBody  Widget widget) {
+        widget.setName("New Widget");
+        widget.setHeight(2);
+        widget.setOrdering(1);
+        widget.setSize(2);
+        widget.setWidth(2);
+        return service.createWidget(topicId, widget);
     }
 
     @DeleteMapping("/api/widgets/{wid}")
-    public int deleteWidget(@PathVariable("wid") String wid) {
+    public int deleteWidget(@PathVariable("wid") Integer wid) {
         return service.deleteWidget(wid);
     }
 
     @GetMapping("/api/topics/{tid}/widgets")
     public List<Widget> findWidgetsForTopic(
-            @PathVariable("tid") String topicId) {
+            @PathVariable("tid") Integer topicId) {
         return service.findWidgetsForTopic(topicId);
     }
 
@@ -54,15 +60,15 @@ public class WidgetController {
     }
 
     @GetMapping("/api/widgets/{widgetId}")
-    public Widget findWidgetById(@PathVariable("widgetId") String wid) {
+    public Widget findWidgetById(@PathVariable("widgetId") Integer wid) {
         return service.findWidgetById(wid);
     }
 
-    @GetMapping("/api/widget")
-    public Widget getWidget() {
-        Widget w1 = new Widget("123", "Widget A");
-        return w1;
-    }
+//    @GetMapping("/api/widget")
+//    public Widget getWidget() {
+//        Widget w1 = new Widget("123", "Widget A");
+//        return w1;
+//    }
 
     @GetMapping("/api/hello")
     public String sayHello() {
