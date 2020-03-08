@@ -1,12 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.models.Topic;
+import com.example.demo.models.Widget;
 import com.example.demo.services.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,6 +14,13 @@ public class TopicController {
 
     @Autowired
     TopicService topicService;
+
+    @PostMapping("/api/lessons/{lid}/topics")
+    public Topic createWidget(@PathVariable("lid") String lessonId, @RequestBody  Topic topic) {
+        topic.setLessonId(lessonId);
+        topic.setTitle("New Topic");
+        return topicService.createTopic(lessonId, topic);
+    }
 
     @GetMapping("api/topics")
     public List<Topic> findAllTopics() {
