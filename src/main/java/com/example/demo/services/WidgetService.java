@@ -174,12 +174,18 @@ public class WidgetService {
     }
 
     public int updateWidget(Integer widgetId, Widget newWidget) {
-
+          String url = null;
+          String text = newWidget.getText();
+          if(newWidget.getType().equals("IMAGE")) {
+              text = null;
+              url = newWidget.getUrl();
+          }
           widgetRepository.updateWidget(widgetId,
-                  newWidget.getUrl(),
+                  url,
                   newWidget.getType(),
-                  newWidget.getText(),
+                  text,
                   newWidget.getSize(),
+                  newWidget.getStyle(),
                   newWidget.getName());
 //        int a =0;
 //        for(Widget w : widgetList) {

@@ -16,12 +16,13 @@ public interface WidgetRepository extends CrudRepository<Widget, Integer> {
 
     @Modifying
     @Transactional
-    @Query(value = "update widgets set name = :newName, size = :newSize, text = :newText, type = :newType, url = :newUrl where id = :wid", nativeQuery = true)
+    @Query(value = "update widgets set name = :newName, style = :newStyle, size = :newSize, text = :newText, type = :newType, url = :newUrl where id = :wid", nativeQuery = true)
     public void updateWidget(@Param("wid") Integer wid,
                              @Param("newUrl") String newUrl,
                              @Param("newType") String newType,
                              @Param("newText") String newText,
                              @Param("newSize") Integer newSize,
+                             @Param("newStyle") String newStyle,
                              @Param("newName") String newName
                             );
 

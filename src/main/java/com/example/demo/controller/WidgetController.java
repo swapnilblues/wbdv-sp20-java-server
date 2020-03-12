@@ -29,6 +29,7 @@ public class WidgetController {
         widget.setHeight(2);
         widget.setOrdering(1);
         widget.setSize(2);
+        widget.setStyle("ul");
         widget.setWidth(2);
         return service.createWidget(topicId, widget);
     }
