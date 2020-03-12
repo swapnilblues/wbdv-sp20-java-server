@@ -15,6 +15,16 @@ public class TopicController {
     @Autowired
     TopicService topicService;
 
+    @PutMapping("/api/topics/{tid}")
+    public int updateTopic(@PathVariable("tid") Integer topicId, @RequestBody  Topic topic) {
+        return topicService.updateTopic(topicId, topic);
+    }
+
+    @DeleteMapping("/api/topics/{tid}")
+    public int deleteTopic(@PathVariable("tid") Integer tid) {
+        return topicService.deleteTopic(tid);
+    }
+
     @PostMapping("/api/lessons/{lid}/topics")
     public Topic createWidget(@PathVariable("lid") String lessonId, @RequestBody  Topic topic) {
         topic.setLessonId(lessonId);
