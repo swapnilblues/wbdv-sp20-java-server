@@ -173,8 +173,14 @@ public class WidgetService {
         return (List<Widget>) widgetRepository.findAll();
     }
 
-    public int updateWidget(String widgetId, Widget newWidget) {
+    public int updateWidget(Integer widgetId, Widget newWidget) {
 
+          widgetRepository.updateWidget(widgetId,
+                  newWidget.getUrl(),
+                  newWidget.getType(),
+                  newWidget.getText(),
+                  newWidget.getSize(),
+                  newWidget.getName());
 //        int a =0;
 //        for(Widget w : widgetList) {
 //            if(w.getId().equals(widgetId)) {
