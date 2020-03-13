@@ -44,6 +44,10 @@ public class TopicService {
         return 1;
     }
 
+    public Topic findTopicById(Integer topicId) {
+        return topicRepository.findById(topicId).get();
+    }
+
     public int updateTopic(Integer topicId, Topic newTopic) {
         topicRepository.updateTopic(topicId,newTopic.getTitle());
         return 1;

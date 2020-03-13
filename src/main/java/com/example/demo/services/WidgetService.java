@@ -64,28 +64,22 @@ public class WidgetService {
     }
 
     public int deleteWidget(Integer wid) {
-//        widgetList = widgetList
-//                .stream()
-//                .filter(w -> !w.getId().equals(wid))
-//                .collect(Collectors.toList());
-//        ;
-//        return 1;
-
-
-//        int a = 0;
-//        List<Widget> newList = new ArrayList<>();
 //
-//        for(Widget widget : widgetList) {
-//            if(widget.getId().equals(wid))
-//                ++a;
-//            else {
-//                newList.add(widget);
-//            }
-//        }
-//        widgetList.clear();
-//        widgetList = newList;
-//        return a;
-
+        Widget widget = widgetRepository.findById(wid).get();
+        Topic topic = widget.getTopic();
+        String widgetOrder = topic.getWidgetOrder();
+        System.out.println(widgetOrder);
+        String[] widgetOrderArray = widgetOrder.trim().split(" ");
+        String newWidgetOrder = "";
+        for(String widgetOrderElement : widgetOrderArray ) {
+            int widgetElementId = Integer.parseInt(widgetOrderElement);
+            if(widgetElementId != wid) {
+                newWidgetOrder += " " + widgetElementId;
+            }
+        }
+        newWidgetOrder = newWidgetOrder.trim();
+        topic.setWidgetOrder(newWidgetOrder);
+        topicRepository.save(topic);
         widgetRepository.deleteById(wid);
         return 1;
     }
@@ -107,7 +101,7 @@ public class WidgetService {
             return widgets;
         widgets.clear();
         String[] widgetOrders = topic.getWidgetOrder().trim().split(" ");
-        System.out.println("AA " + widgetOrders.toString());
+//        System.out.println("AA " + widgetOrders.toString());
 
         for (String widgetOrder : widgetOrders) {
             int orderId = Integer.parseInt(widgetOrder);
