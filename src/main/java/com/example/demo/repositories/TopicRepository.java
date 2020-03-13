@@ -18,4 +18,9 @@ public interface TopicRepository extends CrudRepository<Topic, Integer> {
     @Transactional
     @Query(value = "update topics set title =:newTitle where id=:tid", nativeQuery = true)
     public void updateTopic(@Param("tid") Integer tid, @Param("newTitle") String newTitle);
+
+    @Modifying
+    @Transactional
+    @Query(value = "update topics set widget_order =:newWidgetOrder where id=:tid", nativeQuery = true)
+    public void updateTopicWidgetOrder(@Param("tid") Integer tid, @Param("newWidgetOrder") String newWidgetOrder);
 }

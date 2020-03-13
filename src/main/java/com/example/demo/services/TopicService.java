@@ -21,6 +21,7 @@ public class TopicService {
     public Topic createTopic(String lessonId, Topic topic) {
 //        widgetList.add(widget);
 //        return widget;
+        topic.setWidgetOrder("");
         return topicRepository.save(topic);
     }
 

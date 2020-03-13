@@ -12,12 +12,21 @@ public class Topic {
     private Integer id;
     private String title;
     private String lessonId;
+    private String widgetOrder;
 
     @OneToMany(mappedBy = "topic")
     private List<Widget> widgets;
 
     public String getLessonId() {
         return lessonId;
+    }
+
+    public String getWidgetOrder() {
+        return widgetOrder;
+    }
+
+    public void setWidgetOrder(String widgetOrder) {
+        this.widgetOrder = widgetOrder;
     }
 
     public void setLessonId(String lessonId) {

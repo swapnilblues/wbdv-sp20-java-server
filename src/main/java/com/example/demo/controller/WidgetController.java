@@ -46,12 +46,12 @@ public class WidgetController {
     }
 
     @GetMapping("/api/widgets/down-widget/{wid}")
-    public List<Widget> downWidget(@PathVariable("wid") String widgetId) {
+    public List<Widget> downWidget(@PathVariable("wid") Integer widgetId) {
         return service.downWidget(widgetId);
     }
 
     @GetMapping("/api/widgets/up-widget/{wid}")
-    public List<Widget> upWidget(@PathVariable("wid") String widgetId) {
+    public List<Widget> upWidget(@PathVariable("wid") Integer widgetId) {
         return service.upWidget(widgetId);
     }
 

@@ -14,11 +14,11 @@ import java.util.List;
 @Service
 public class WidgetService {
 
-      @Autowired
-      WidgetRepository widgetRepository;
+    @Autowired
+    WidgetRepository widgetRepository;
 
-      @Autowired
-      TopicRepository topicRepository;
+    @Autowired
+    TopicRepository topicRepository;
 //    List<Widget> widgetList = new ArrayList<>();
 
 //    {
@@ -54,8 +54,13 @@ public class WidgetService {
 //        widgetList.add(widget);
 //        return widget;
         Topic topic = topicRepository.findById(topicId).get();
+        String topicOrder = topic.getWidgetOrder();
         widget.setTopic(topic);
-        return widgetRepository.save(widget);
+        Widget newWidget = widgetRepository.save(widget);
+//        System.out.println("AA" + newWidget.getType() + newWidget.getId());
+        topic.setWidgetOrder(topicOrder + " " + newWidget.getId());
+        topicRepository.save(topic);
+        return widget;
     }
 
     public int deleteWidget(Integer wid) {
@@ -96,11 +101,20 @@ public class WidgetService {
 
     public List<Widget> findWidgetsForTopic(Integer topicId) {
         Topic topic = topicRepository.findById(topicId).get();
-//        System.out.println(topicId);
-        List<Widget> results = new ArrayList<>();
-        if(topic.getWidgets().size() > 0)
-            return topic.getWidgets();
-        return results;
+//        System.out.println(topic.getWidgetOrder());
+        List<Widget> widgets = topic.getWidgets();
+        if (widgets.size() < 1)
+            return widgets;
+        widgets.clear();
+        String[] widgetOrders = topic.getWidgetOrder().trim().split(" ");
+        System.out.println("AA " + widgetOrders.toString());
+
+        for (String widgetOrder : widgetOrders) {
+            int orderId = Integer.parseInt(widgetOrder);
+            widgets.add(widgetRepository.findById(orderId).get());
+        }
+
+        return widgets;
 //        List<Widget> results = new ArrayList<>();
 //        for (Widget w : widgetList) {
 //            if (w.getTopicId().equals(topicId)) {
@@ -111,7 +125,41 @@ public class WidgetService {
 //        return results;
     }
 
-    public List<Widget> downWidget(String widgetId) {
+    public List<Widget> downWidget(Integer widgetId) {
+
+        Widget widget = widgetRepository.findById(widgetId).get();
+        Topic topic = widget.getTopic();
+        List<Widget> widgets = topic.getWidgets();
+        if (widgets.size() < 1)
+            return widgets;
+        widgets.clear();
+        String newWidgetOrder = " ";
+        String[] widgetOrders = topic.getWidgetOrder().trim().split(" ");
+        for (int i = 0; i < widgetOrders.length; i++) {
+            if (Integer.parseInt(widgetOrders[i]) == widgetId && i != widgetOrders.length - 1) {
+                newWidgetOrder += " " + Integer.parseInt(widgetOrders[i + 1]);
+                newWidgetOrder += " " + Integer.parseInt(widgetOrders[i]);
+                ++i;
+            } else {
+                newWidgetOrder += " " + Integer.parseInt(widgetOrders[i]);
+            }
+        }
+
+//        System.out.println(newWidgetOrder);
+//        topic.setWidgetOrder(newWidgetOrder);
+        Integer topicId = topic.getId();
+        topicRepository.updateTopicWidgetOrder(topicId, newWidgetOrder.trim());
+
+//        System.out.println(topic.getId());
+        widgetOrders = newWidgetOrder.trim().split(" ");
+        widgets.clear();
+        for (String widgetOrder : widgetOrders) {
+            int wid = Integer.parseInt(widgetOrder);
+            widgets.add(findWidgetById(wid));
+        }
+
+        return widgets;
+
 //        Widget widget = new Widget();
 //        for (Widget w : widgetList) {
 //            if (w.getId().equals(widgetId)) {
@@ -136,10 +184,51 @@ public class WidgetService {
 //            }
 //        }
 //        return findWidgetsForTopic(topicId);
-        return null;
+//        return null;
     }
 
-    public List<Widget> upWidget(String widgetId) {
+    public List<Widget> upWidget(Integer widgetId) {
+
+        Widget widget = widgetRepository.findById(widgetId).get();
+        Topic topic = widget.getTopic();
+        List<Widget> widgets = topic.getWidgets();
+        if (widgets.size() < 1)
+            return widgets;
+        widgets.clear();
+        String newWidgetOrder = " ";
+        String[] widgetOrders = topic.getWidgetOrder().trim().split(" ");
+        int i;
+        for (i = 0; i < widgetOrders.length-1; i++) {
+            if (Integer.parseInt(widgetOrders[i+1]) == widgetId) {
+                newWidgetOrder += " " + Integer.parseInt(widgetOrders[i + 1]);
+                newWidgetOrder += " " + Integer.parseInt(widgetOrders[i]);
+                ++i;
+            } else {
+                newWidgetOrder += " " + Integer.parseInt(widgetOrders[i]);
+            }
+        }
+
+        while(i < widgetOrders.length) {
+            newWidgetOrder += " " + Integer.parseInt(widgetOrders[i]);
+            ++i;
+        }
+
+//        System.out.println(newWidgetOrder);
+//        topic.setWidgetOrder(newWidgetOrder);
+        Integer topicId = topic.getId();
+        topicRepository.updateTopicWidgetOrder(topicId, newWidgetOrder.trim());
+
+//        System.out.println(topic.getId());
+        widgetOrders = newWidgetOrder.trim().split(" ");
+        widgets.clear();
+        for (String widgetOrder : widgetOrders) {
+            int wid = Integer.parseInt(widgetOrder);
+            widgets.add(findWidgetById(wid));
+        }
+
+        return widgets;
+
+
 //        Widget widget = new Widget();
 //        for (Widget w : widgetList) {
 //            if (w.getId().equals(widgetId)) {
@@ -164,7 +253,7 @@ public class WidgetService {
 //            }
 //        }
 //        return findWidgetsForTopic(topicId);
-        return null;
+//        return null;
     }
 
     public List<Widget> findAllWidgets() {
@@ -174,37 +263,19 @@ public class WidgetService {
     }
 
     public int updateWidget(Integer widgetId, Widget newWidget) {
-          String url = null;
-          String text = newWidget.getText();
-          if(newWidget.getType().equals("IMAGE")) {
-              text = null;
-              url = newWidget.getUrl();
-          }
-          widgetRepository.updateWidget(widgetId,
-                  url,
-                  newWidget.getType(),
-                  text,
-                  newWidget.getSize(),
-                  newWidget.getStyle(),
-                  newWidget.getName());
-//        int a =0;
-//        for(Widget w : widgetList) {
-//            if(w.getId().equals(widgetId)) {
-//                ++a;
-//                w.setName(newWidget.getName());
-//                w.setType(newWidget.getType());
-//                w.setCssClass(newWidget.getCssClass());
-//                w.setHeight(newWidget.getHeight());
-//                w.setWidth(newWidget.getWidth());
-//                w.setOrdering(newWidget.getOrdering());
-//                w.setText(newWidget.getText());
-//                w.setUrl(newWidget.getUrl());
-//                w.setSize(newWidget.getSize());
-//                w.setStyle(newWidget.getStyle());
-//                w.setValue(newWidget.getValue());
-//            }
-//        }
-//        return a;
+        String url = null;
+        String text = newWidget.getText();
+        if (newWidget.getType().equals("IMAGE")) {
+            text = null;
+            url = newWidget.getUrl();
+        }
+        widgetRepository.updateWidget(widgetId,
+                url,
+                newWidget.getType(),
+                text,
+                newWidget.getSize(),
+                newWidget.getStyle(),
+                newWidget.getName());
         return 1;
     }
 }
