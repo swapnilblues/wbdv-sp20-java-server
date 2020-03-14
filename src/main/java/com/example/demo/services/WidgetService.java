@@ -51,8 +51,7 @@ public class WidgetService {
 //    }
 
     public Widget createWidget(Integer topicId, Widget widget) {
-//        widgetList.add(widget);
-//        return widget;
+
         Topic topic = topicRepository.findById(topicId).get();
         String topicOrder = topic.getWidgetOrder();
         widget.setTopic(topic);
